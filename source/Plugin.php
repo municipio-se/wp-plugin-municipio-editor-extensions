@@ -6,7 +6,7 @@ namespace MunicipioEditorExtensions;
 
 final class Plugin
 {
-    private const VERSION = '0.1.5';
+    private const VERSION = '1.0.0';
     private bool $enqueued = false;
 
     public function __construct(private readonly string $file) {}
