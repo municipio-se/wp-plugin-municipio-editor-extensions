@@ -3,7 +3,8 @@
   inset: auto;
   margin: 0;
   box-sizing: border-box;
-  max-inline-size: min(22rem, calc(100vw - 16px));
+  inline-size: max-content;
+  max-inline-size: calc(100vw - 16px);
   padding: 8px 12px;
   border: 1px solid #b57700;
   border-radius: 4px;

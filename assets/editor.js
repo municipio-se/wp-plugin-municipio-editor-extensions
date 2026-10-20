@@ -281,6 +281,8 @@
       editor.getDoc().addEventListener("keydown", escape, true);
       observer = new ResizeObserver(position);
       observer.observe(editor.getContainer());
+      observer.observe(popover);
+      observer.observe(editor.getBody());
       editor.on(
         "input change SetContent Undo Redo NodeChange SelectionChange focus",
         schedule,

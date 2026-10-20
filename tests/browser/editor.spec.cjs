@@ -346,6 +346,26 @@ test("warnings sit above the heading with an unclipped gutter and scoped focus r
     await page.setViewportSize({ width, height: 900 });
     await select(page, "caret");
     await expect(page.locator(".mee-heading-popover")).toBeVisible();
+    await expect
+      .poll(() =>
+        page.evaluate((width) => {
+          const editor = tinymce.get("content");
+          const heading = editor
+            .getBody()
+            .querySelector("h3")
+            .getBoundingClientRect();
+          const iframe = editor.iframeElement.getBoundingClientRect();
+          const tip = document
+            .querySelector(".mee-heading-popover")
+            .getBoundingClientRect();
+          return (
+            tip.bottom < heading.top + iframe.top &&
+            (width !== 1280 ||
+              Math.abs(tip.left - heading.left - iframe.left) < 0.5)
+          );
+        }, width),
+      )
+      .toBe(true);
     const geometry = await page.evaluate(() => {
       const editor = tinymce.get("content");
       const h = editor.getBody().querySelector("h3");
@@ -362,6 +382,7 @@ test("warnings sit above the heading with an unclipped gutter and scoped focus r
         tipLeft: tip.left,
         tipBottom: tip.bottom,
         tipRight: tip.right,
+        tipHeight: tip.height,
         iconLeft: rect.left + parseFloat(icon.left),
         iconRight: parseFloat(icon.left) + parseFloat(icon.width),
         outline: body.outlineStyle,
@@ -369,8 +390,10 @@ test("warnings sit above the heading with an unclipped gutter and scoped focus r
       };
     });
     expect(geometry.tipBottom).toBeLessThan(geometry.headingTop);
-    if (width === 1280)
+    if (width === 1280) {
       expect(geometry.tipLeft).toBeCloseTo(geometry.headingLeft, 0);
+      expect(geometry.tipHeight).toBe(39);
+    }
     expect(geometry.tipRight).toBeLessThanOrEqual(width);
     expect(geometry.iconLeft).toBeGreaterThanOrEqual(0);
     expect(geometry.iconRight).toBeLessThan(0);
