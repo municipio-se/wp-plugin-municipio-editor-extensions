@@ -1,0 +1,30 @@
+.mee-heading-popover {
+  position: fixed;
+  inset: auto;
+  margin: 0;
+  max-inline-size: min(22rem, calc(100vw - 16px));
+  padding: 8px 12px;
+  border: 1px solid #b57700;
+  border-radius: 4px;
+  background: #fff8e5;
+  color: #302000;
+  font:
+    14px/1.5 system-ui,
+    sans-serif;
+  box-shadow: 0 2px 8px #0002;
+  z-index: 1000000;
+  pointer-events: none;
+}
+
+.mee-heading-popover[hidden] {
+  display: none;
+}
+
+.mee-heading-status {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

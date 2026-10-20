@@ -1,0 +1,14 @@
+{
+  "name": "municipio-editor-extensions",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/*.test.cjs && php tests/context.php",
+    "test:browser": "playwright test",
+    "format": "prettier --write assets tests playwright.config.cjs package.json composer.json README.md"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.55.1",
+    "prettier": "^3.9.4",
+    "tinymce": "4.9.11"
+  }
+}

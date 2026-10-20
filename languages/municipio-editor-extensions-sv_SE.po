@@ -1,0 +1,14 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: Municipio Editor Extensions 0.1.0\n"
+"Language: sv_SE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "H{level} is outside this field's heading hierarchy. Use H{expected} or lower."
+msgstr "H{level} ligger utanför fältets rubrikhierarki. Använd H{expected} eller en underrubrik till den nivån."
+
+msgid "H{level} skips a heading level. Use H{expected} before going deeper."
+msgstr "H{level} hoppar över en rubriknivå. Använd H{expected} innan du går vidare till en djupare nivå."

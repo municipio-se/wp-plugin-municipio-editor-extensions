@@ -1,0 +1,30 @@
+{
+  "name": "municipio/wp-plugin-municipio-editor-extensions",
+  "description": "Accessible editorial guidance for TinyMCE fields in modern Municipio.",
+  "type": "wordpress-plugin",
+  "license": "MIT",
+  "require": {
+    "php": "^8.2",
+    "composer/installers": "^2.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "MunicipioEditorExtensions\\": "source/"
+    }
+  },
+  "extra": {
+    "installer-name": "municipio-editor-extensions"
+  },
+  "config": {
+    "allow-plugins": {
+      "composer/installers": true
+    }
+  },
+  "scripts": {
+    "test": [
+      "@php tests/context.php",
+      "node --test tests/*.test.cjs"
+    ],
+    "lint": "find source tests -name '*.php' -exec php -l {} \\;"
+  }
+}

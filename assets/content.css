@@ -1,0 +1,24 @@
+[data-mee-heading-warning] {
+  position: relative;
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-color: #b57700;
+  text-underline-offset: 0.2em;
+}
+
+[data-mee-heading-warning]::after {
+  content: "";
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline-end: 0;
+  inline-size: 16px;
+  block-size: 16px;
+  pointer-events: none;
+  background: url("warning.svg") center / contain no-repeat;
+}
+
+@media (forced-colors: active) {
+  [data-mee-heading-warning] {
+    text-decoration-color: Mark;
+  }
+}
