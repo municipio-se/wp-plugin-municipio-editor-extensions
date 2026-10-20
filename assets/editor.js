@@ -224,6 +224,13 @@
       // TinyMCE's serializer excludes this attribute from content and undo
       // snapshots; ignore prevents our decorations from creating undo levels.
       editor.undoManager.ignore(() => {
+        // FormatBlock copies attributes when a heading becomes a paragraph.
+        editor
+          .getBody()
+          .querySelectorAll(`[${attribute}]`)
+          .forEach((element) => {
+            if (!element.matches(selector)) element.removeAttribute(attribute);
+          });
         headings.forEach((heading, i) => {
           if (results[i]) {
             invalid.set(heading, results[i]);

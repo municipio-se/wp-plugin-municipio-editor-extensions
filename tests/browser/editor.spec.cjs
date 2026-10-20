@@ -315,3 +315,16 @@ test("unknown dynamic ACF editors and changed module settings", async ({
     page.frameLocator("#content_ifr").locator("[data-mee-heading-warning]"),
   ).toHaveCount(0);
 });
+
+test("changing a warned heading into a paragraph removes its decoration", async ({
+  page,
+}) => {
+  await select(page, "caret");
+  await page.evaluate(() =>
+    tinymce.get("content").execCommand("FormatBlock", false, "p"),
+  );
+  await expect(
+    page.frameLocator("iframe").locator("p[data-mee-heading-warning]"),
+  ).toHaveCount(0);
+  await expect(page.locator(".mee-heading-popover:visible")).toHaveCount(0);
+});

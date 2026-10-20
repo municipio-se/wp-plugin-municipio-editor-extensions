@@ -6,6 +6,7 @@ namespace MunicipioEditorExtensions;
 
 final class Plugin
 {
+    private const VERSION = '0.1.1';
     private bool $enqueued = false;
 
     public function __construct(private readonly string $file) {}
@@ -30,7 +31,7 @@ final class Plugin
     public function plugins(array $plugins): array
     {
         $this->enqueue();
-        $plugins['municipio_editor_extensions'] = plugins_url('assets/editor.js', $this->file);
+        $plugins['municipio_editor_extensions'] = add_query_arg('ver', self::VERSION, plugins_url('assets/editor.js', $this->file));
         return $plugins;
     }
 
@@ -44,14 +45,14 @@ final class Plugin
             'municipio-editor-extensions',
             plugins_url('assets/editor.js', $this->file),
             ['wp-tinymce'],
-            '0.1.0',
+            self::VERSION,
             true,
         );
         wp_enqueue_style(
             'municipio-editor-extensions',
             plugins_url('assets/admin.css', $this->file),
             [],
-            '0.1.0',
+            self::VERSION,
         );
         wp_add_inline_script(
             'municipio-editor-extensions',
@@ -70,7 +71,7 @@ final class Plugin
     {
         require_once __DIR__ . '/HeadingContext.php';
         $context = (new HeadingContext())->resolve(get_post());
-        $context['stylesheet'] = plugins_url('assets/content.css', $this->file);
+        $context['stylesheet'] = add_query_arg('ver', self::VERSION, plugins_url('assets/content.css', $this->file));
         $context['messages'] = [
             'parent' => __('H{level} is outside this field\'s heading hierarchy. Use H{expected} or lower.', 'municipio-editor-extensions'),
             'skip' => __('H{level} skips a heading level. Use H{expected} before going deeper.', 'municipio-editor-extensions'),

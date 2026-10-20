@@ -5,3 +5,4 @@
 /.gitattributes export-ignore
 /.prettierrc.json export-ignore
 /playwright.config.cjs export-ignore
+/playwright.stage.config.cjs export-ignore
