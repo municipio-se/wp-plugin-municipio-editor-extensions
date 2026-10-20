@@ -48,12 +48,32 @@ test("editor role receives contextual guidance without configuration", async ({
       color: style.textDecorationColor,
       icon: icon.backgroundImage,
       size: icon.width,
+      iconOffset: parseFloat(icon.left) + parseFloat(icon.width),
+      outline: editor.getWin().getComputedStyle(editor.getBody()).outlineStyle,
+      shadow: editor.getWin().getComputedStyle(editor.getBody()).boxShadow,
+      headingTop:
+        heading.getBoundingClientRect().top +
+        editor.iframeElement.getBoundingClientRect().top,
+      headingLeft:
+        heading.getBoundingClientRect().left +
+        editor.iframeElement.getBoundingClientRect().left,
+      popover: (() => {
+        const rect = document
+          .querySelector(".mee-heading-popover:popover-open")
+          .getBoundingClientRect();
+        return { bottom: rect.bottom, left: rect.left };
+      })(),
     };
   });
   expect(decoration.line).toBe("wavy");
   expect(decoration.color).toBe("rgb(181, 119, 0)");
   expect(decoration.icon).toContain("warning.svg");
   expect(decoration.size).toBe("16px");
+  expect(decoration.iconOffset).toBeLessThan(0);
+  expect(decoration.outline).toBe("none");
+  expect(decoration.shadow).toBe("none");
+  expect(decoration.popover.bottom).toBeLessThan(decoration.headingTop);
+  expect(decoration.popover.left).toBeCloseTo(decoration.headingLeft, 0);
   await expect(
     page.locator(".mee-heading-status[role=status]").filter({ hasText: "H1" }),
   ).toHaveCount(1);

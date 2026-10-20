@@ -10,7 +10,7 @@
   content: "";
   position: absolute;
   inset-block-start: 0;
-  inset-inline-end: 0;
+  inset-inline-start: -24px;
   inline-size: 16px;
   block-size: 16px;
   pointer-events: none;
@@ -21,4 +21,16 @@
   [data-mee-heading-warning] {
     text-decoration-color: Mark;
   }
+}
+/* Keep a gutter for diagnostics, including editors without Municipio styles. */
+body#tinymce {
+  margin-inline-start: 32px;
+}
+
+/* Port of Municipio Extended 45b8006: exclude the editing surface from the
+   frontend's universal focus ring without removing focus cues from its links. */
+body#tinymce:focus,
+body#tinymce:focus-visible {
+  outline: none;
+  box-shadow: none;
 }

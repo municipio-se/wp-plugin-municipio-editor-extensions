@@ -328,3 +328,61 @@ test("changing a warned heading into a paragraph removes its decoration", async 
   ).toHaveCount(0);
   await expect(page.locator(".mee-heading-popover:visible")).toHaveCount(0);
 });
+
+test("warnings sit above the heading with an unclipped gutter and scoped focus reset", async ({
+  page,
+}) => {
+  await page.addStyleTag({ url: "/assets/admin.css" });
+  await page.evaluate(() => {
+    document.body.style.paddingTop = "200px";
+    const doc = tinymce.get("content").getDoc();
+    const style = doc.createElement("style");
+    // The actual Municipio rule also applies to the editable body.
+    style.textContent =
+      "*:focus-visible:not(input){outline:thick solid #4d90fe;box-shadow:0 0 0 6px white}";
+    doc.head.append(style);
+  });
+  for (const width of [1280, 375]) {
+    await page.setViewportSize({ width, height: 900 });
+    await select(page, "caret");
+    await expect(page.locator(".mee-heading-popover")).toBeVisible();
+    const geometry = await page.evaluate(() => {
+      const editor = tinymce.get("content");
+      const h = editor.getBody().querySelector("h3");
+      const rect = h.getBoundingClientRect();
+      const frame = editor.iframeElement.getBoundingClientRect();
+      const tip = document
+        .querySelector(".mee-heading-popover")
+        .getBoundingClientRect();
+      const icon = editor.getWin().getComputedStyle(h, "::after");
+      const body = editor.getWin().getComputedStyle(editor.getBody());
+      return {
+        headingLeft: frame.left + rect.left,
+        headingTop: frame.top + rect.top,
+        tipLeft: tip.left,
+        tipBottom: tip.bottom,
+        tipRight: tip.right,
+        iconLeft: rect.left + parseFloat(icon.left),
+        iconRight: parseFloat(icon.left) + parseFloat(icon.width),
+        outline: body.outlineStyle,
+        shadow: body.boxShadow,
+      };
+    });
+    expect(geometry.tipBottom).toBeLessThan(geometry.headingTop);
+    if (width === 1280)
+      expect(geometry.tipLeft).toBeCloseTo(geometry.headingLeft, 0);
+    expect(geometry.tipRight).toBeLessThanOrEqual(width);
+    expect(geometry.iconLeft).toBeGreaterThanOrEqual(0);
+    expect(geometry.iconRight).toBeLessThan(0);
+    expect(geometry.outline).toBe("none");
+    expect(geometry.shadow).toBe("none");
+  }
+  const linkOutline = await page.evaluate(() => {
+    const editor = tinymce.get("content");
+    const link = editor.getBody().querySelector("a");
+    link.contentEditable = "false";
+    link.focus();
+    return editor.getWin().getComputedStyle(link).outlineStyle;
+  });
+  expect(linkOutline).toBe("solid");
+});

@@ -167,7 +167,7 @@
       const width = popover.getBoundingClientRect().width;
       const height = popover.getBoundingClientRect().height;
       popover.style.left = `${Math.max(8, Math.min(offset.left + rect.left, window.innerWidth - width - 8))}px`;
-      popover.style.top = `${Math.max(8, Math.min(offset.top + rect.bottom + 6, window.innerHeight - height - 8))}px`;
+      popover.style.top = `${Math.max(8, Math.min(offset.top + rect.top - height - 6, window.innerHeight - height - 8))}px`;
     }
 
     function explain() {
