@@ -403,6 +403,7 @@ test("warnings sit above the heading with an unclipped gutter and scoped focus r
             .getBoundingClientRect();
           return (
             tip.bottom < heading.top + iframe.top &&
+            tip.right <= width &&
             (width !== 1280 ||
               Math.abs(tip.left - heading.left - iframe.left) < 0.5)
           );
