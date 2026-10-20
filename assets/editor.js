@@ -132,7 +132,7 @@
     const messages = context.messages || {
       parent:
         "H{level} is outside this field's heading hierarchy. Use H{expected} or lower.",
-      skip: "H{level} skips a heading level. Use H{expected} before going deeper.",
+      skip: "Choose Heading {expected} here to keep headings in the right order.",
     };
     let invalid = new Map();
     let dismissed = null;

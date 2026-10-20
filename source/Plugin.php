@@ -6,7 +6,7 @@ namespace MunicipioEditorExtensions;
 
 final class Plugin
 {
-    private const VERSION = '0.1.2';
+    private const VERSION = '0.1.3';
     private bool $enqueued = false;
 
     public function __construct(private readonly string $file) {}
@@ -74,7 +74,7 @@ final class Plugin
         $context['stylesheet'] = add_query_arg('ver', self::VERSION, plugins_url('assets/content.css', $this->file));
         $context['messages'] = [
             'parent' => __('H{level} is outside this field\'s heading hierarchy. Use H{expected} or lower.', 'municipio-editor-extensions'),
-            'skip' => __('H{level} skips a heading level. Use H{expected} before going deeper.', 'municipio-editor-extensions'),
+            'skip' => __('Choose Heading {expected} here to keep headings in the right order.', 'municipio-editor-extensions'),
         ];
         /**
          * Custom renderers can provide their own field/parent contract. A null

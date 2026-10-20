@@ -10,5 +10,5 @@ msgstr ""
 msgid "H{level} is outside this field's heading hierarchy. Use H{expected} or lower."
 msgstr "H{level} ligger utanför fältets rubrikhierarki. Använd H{expected} eller en underrubrik till den nivån."
 
-msgid "H{level} skips a heading level. Use H{expected} before going deeper."
-msgstr "H{level} hoppar över en rubriknivå. Använd H{expected} innan du går vidare till en djupare nivå."
+msgid "Choose Heading {expected} here to keep headings in the right order."
+msgstr "Välj Rubrik {expected} här så att rubrikerna kommer i rätt ordning."
