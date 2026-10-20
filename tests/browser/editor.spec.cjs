@@ -24,7 +24,7 @@ test.beforeEach(async ({ page }) => {
     await tinymce.init({
       selector: "#content",
       menubar: false,
-      toolbar: false,
+      toolbar: "formatselect",
       mee_context: { parentLevel: 1, stylesheet: "/assets/content.css" },
     });
     const editor = tinymce.get("content");
@@ -77,6 +77,49 @@ async function select(page, kind) {
     editor.fire("SelectionChange");
   }, kind);
 }
+
+test("format menu hides the warning and preserves selection and Escape dismissal", async ({
+  page,
+}) => {
+  await page.addStyleTag({ url: "/assets/admin.css" });
+  await select(page, "caret");
+  const warning = page.locator(".mee-heading-popover");
+  const formats = page.locator(".mce-listbox");
+  await expect(warning).toBeVisible();
+  await formats.click();
+  await expect(
+    page.getByRole("menuitem", { name: "Heading 2", exact: true }),
+  ).toBeVisible();
+  await expect(warning).toBeHidden();
+  await page.getByRole("menuitem", { name: "Heading 2", exact: true }).click();
+  await expect(page.frameLocator("iframe").locator("h2").first()).toHaveText(
+    "Invalid nested link",
+  );
+  await expect(warning).toBeHidden();
+
+  await page.evaluate(
+    (content) => tinymce.get("content").setContent(content),
+    content,
+  );
+  await select(page, "caret");
+  await expect(warning).toBeVisible();
+  await page.keyboard.press("Alt+F10");
+  await expect(warning).toBeHidden();
+  await page.keyboard.press("ArrowDown");
+  await expect(
+    page.getByRole("menuitem", { name: "Heading 2", exact: true }),
+  ).toBeVisible();
+  await page.keyboard.press("Escape");
+  await select(page, "caret");
+  await expect(warning).toBeVisible();
+  await page.keyboard.press("Escape");
+  await formats.click();
+  await page.keyboard.press("Escape");
+  await select(page, "caret");
+  await expect(warning).toBeHidden();
+  await select(page, "nested");
+  await expect(warning).toBeVisible();
+});
 
 test("selection containment, nested markup and reversed selection", async ({
   page,

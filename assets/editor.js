@@ -279,6 +279,10 @@
       editor.getDoc().addEventListener("selectionchange", schedule);
       editor.getDoc().addEventListener("scroll", position, true);
       editor.getDoc().addEventListener("keydown", escape, true);
+      // TinyMCE's editor-level blur excludes its toolbar and menus. Observe
+      // native focus instead so our top-layer popover cannot cover those.
+      editor.getDoc().addEventListener("blur", hide, true);
+      editor.getDoc().addEventListener("focus", schedule, true);
       observer = new ResizeObserver(position);
       observer.observe(editor.getContainer());
       observer.observe(popover);
@@ -303,6 +307,8 @@
         editorDocument.removeEventListener("selectionchange", schedule);
         editorDocument.removeEventListener("scroll", position, true);
         editorDocument.removeEventListener("keydown", escape, true);
+        editorDocument.removeEventListener("blur", hide, true);
+        editorDocument.removeEventListener("focus", schedule, true);
       }
       if (observer) observer.disconnect();
       if (popover) popover.remove();
