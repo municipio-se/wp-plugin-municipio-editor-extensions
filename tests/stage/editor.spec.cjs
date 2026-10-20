@@ -38,6 +38,25 @@ test("editor role receives contextual guidance without configuration", async ({
   await expect(page.locator(".mee-heading-popover:visible")).toContainText(
     "H1",
   );
+  const decoration = await page.evaluate(() => {
+    const editor = tinymce.get("content");
+    const heading = editor.getBody().querySelector("h1");
+    const style = editor.getWin().getComputedStyle(heading);
+    const icon = editor.getWin().getComputedStyle(heading, "::after");
+    return {
+      line: style.textDecorationStyle,
+      color: style.textDecorationColor,
+      icon: icon.backgroundImage,
+      size: icon.width,
+    };
+  });
+  expect(decoration.line).toBe("wavy");
+  expect(decoration.color).toBe("rgb(181, 119, 0)");
+  expect(decoration.icon).toContain("warning.svg");
+  expect(decoration.size).toBe("16px");
+  await expect(
+    page.locator(".mee-heading-status[role=status]").filter({ hasText: "H1" }),
+  ).toHaveCount(1);
   await page.keyboard.press("Escape");
   await expect(page.locator(".mee-heading-popover:visible")).toHaveCount(0);
   await page.evaluate(() => tinymce.activeEditor.fire("SelectionChange"));
@@ -277,15 +296,13 @@ test("paste, undo and heading-to-paragraph formatting stay clean on stage", asyn
     const clipboard = new window.DataTransfer();
     clipboard.setData("text/html", "<h4>Pasted jump</h4>");
     clipboard.setData("text/plain", "Pasted jump");
-    editor
-      .getBody()
-      .dispatchEvent(
-        new window.ClipboardEvent("paste", {
-          clipboardData: clipboard,
-          bubbles: true,
-          cancelable: true,
-        }),
-      );
+    editor.getBody().dispatchEvent(
+      new window.ClipboardEvent("paste", {
+        clipboardData: clipboard,
+        bubbles: true,
+        cancelable: true,
+      }),
+    );
   });
   await expect(
     page.frameLocator("#content_ifr").locator("[data-mee-heading-warning]"),
