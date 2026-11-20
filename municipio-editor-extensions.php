@@ -5,7 +5,7 @@ declare(strict_types=1);
 /**
  * Plugin Name: Municipio Editor Extensions
  * Description: Advisory heading guidance in TinyMCE editors.
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Whitespace
  * Requires PHP: 8.2
  * License: MIT
