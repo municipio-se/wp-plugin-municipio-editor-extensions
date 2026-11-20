@@ -284,7 +284,10 @@
       editor.getDoc().addEventListener("blur", hide, true);
       editor.getDoc().addEventListener("focus", schedule, true);
       observer = new ResizeObserver(position);
-      observer.observe(editor.getContainer());
+      // Inline TinyMCE can have no separate container at init. Its content
+      // element still provides the layout changes needed for positioning.
+      const container = editor.getContainer();
+      if (container) observer.observe(container);
       observer.observe(popover);
       observer.observe(editor.getBody());
       editor.on(
